@@ -13,6 +13,8 @@ Next.js 13 Starter kit with pages dir w/ Typescript + Food Blog(Strapi v4) + Red
 First, run the development server:
 
 ```
+npm install
+
 npm run dev
 ```
 

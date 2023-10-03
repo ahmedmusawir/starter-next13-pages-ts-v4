@@ -73,9 +73,10 @@ const Navbar = () => {
                         href="/"
                         className="rounded-md bg-gray-900 px-3 py-2 text-lg font-large text-white"
                       >
-                        Next.js Starter v3 (Strapi/Auth)
+                        Next.js Starter v4 (Redux)
                       </Link>
                       <nav className="hidden sm:ml-6 sm:flex flex-grow justify-center items-center">
+                        <NavLink href="/blog">Blog</NavLink>
                         <NavLink href="/shop">Shop</NavLink>
                         <NavLink href="/template">Template</NavLink>
                         <NavLink href="/demo">Demo</NavLink>

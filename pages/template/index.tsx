@@ -1,7 +1,5 @@
-import { Inter } from "next/font/google";
 import { Template } from "@/components/page-view";
-
-const inter = Inter({ subsets: ["latin"] });
+import style from "./template.module.scss";
 
 export default function TemplatePage() {
   return <Template />;
