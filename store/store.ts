@@ -1,13 +1,13 @@
-import { apiPost } from "@/services/apiPosts";
+import { apiRTKDemoPosts } from "@/services/apiRTKDemoPosts";
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 export const store = configureStore({
   reducer: {
-    [apiPost.reducerPath]: apiPost.reducer,
+    [apiRTKDemoPosts.reducerPath]: apiRTKDemoPosts.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiPost.middleware),
+    getDefaultMiddleware().concat(apiRTKDemoPosts.middleware),
 });
 
 setupListeners(store.dispatch);

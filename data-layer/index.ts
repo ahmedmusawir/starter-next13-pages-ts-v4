@@ -1,20 +1,10 @@
-// Import your APIs directly
-import {
-  getContacts,
-  ApiResponse as ContactApiResponse,
-} from "./strapi/contacts";
-// import { getCompanies, ApiResponse as CompanyApiResponse } from './strapi/company';
+import * as strapiPostAPI from "../data-layer/post";
+import { PostDataSource } from "./post-entities";
 
-// Define the DataSource interface
-export interface DataSource {
-  getContacts: () => Promise<ContactApiResponse>;
-  // getCompanies: () => Promise<CompanyApiResponse>;
-}
+interface DataSource extends PostDataSource {}
 
-// Directly create a datasource object with your APIs
 const datasource: DataSource = {
-  getContacts,
-  // getCompanies,
+  ...strapiPostAPI,
 };
 
 export default datasource;

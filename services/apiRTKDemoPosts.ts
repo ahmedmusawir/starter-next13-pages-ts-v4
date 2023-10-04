@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const apiPost = createApi({
+export const apiRTKDemoPosts = createApi({
   reducerPath: "apiPost",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://dummyjson.com",
@@ -12,4 +12,4 @@ export const apiPost = createApi({
   }),
 });
 
-export const { useGetPostsQuery } = apiPost;
+export const { useGetPostsQuery } = apiRTKDemoPosts;
