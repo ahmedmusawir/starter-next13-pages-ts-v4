@@ -1,7 +1,7 @@
 // httpService.ts
 import StrapiApiClient from "./strapiApiClient";
 
-interface Pagination {
+export interface Pagination {
   page: number;
   pageSize: number;
   pageCount: number;

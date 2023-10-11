@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Dialog, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { XMarkIcon, ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import PageNotFoundContent from "./PageNotFoundContent";
 import NotFoundContent from "./NotFoundContent";
 import { Page } from "../globals";
@@ -12,15 +12,34 @@ import SidebarDesktop from "../ui-ux/SidebarDesktop";
 import SearchForm from "../forms/SearchForm";
 import JobSortForm from "../forms/JobSortForm";
 import DataList from "../data-view/DataList";
-import RestaurantList from "../data-view/RestaurantList";
+import { PostApiResponse } from "@/services/postService";
+import BlogPostList from "../data-view/BlogPostList";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "@/features/posts/postsSlice";
+import { RootState } from "@/global-interfaces";
 
-const JobsPageContent = () => {
-  return <JobBoard />;
-};
-
-const JobBoard = () => {
+const BlogPageContent = ({
+  initialPosts,
+}: {
+  initialPosts: PostApiResponse;
+}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  //   const { jobs } = useJobs();
+  const dispatch = useDispatch();
+  const [getPosts, { data, error, isLoading }] = useLazyGetPostsQuery();
+  const filters = useSelector((state: RootState) => state.filters);
+  const initialMount = useRef(true);
+
+  useEffect(() => {
+    dispatch(setPosts(initialPosts));
+  }, [initialPosts, dispatch]);
+
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+    } else {
+      getPosts(filters);
+    }
+  }, [filters]);
 
   return (
     <>
@@ -147,16 +166,7 @@ const JobBoard = () => {
               <div className="">
                 {/* Your content */}
 
-                {/* <Row className="mx-auto"> */}
-                <RestaurantList />
-                {/* <DataList /> */}
-                {/* <h1 className="h1 text-center mb-5">Recent Jobs</h1> */}
-                {/* {jobs && jobs.data.length > 0 ? (
-                    <JobList jobs={jobs} />
-                  ) : (
-                    <NotFoundContent contentName="Jobs" />
-                  )} */}
-                {/* </Row> */}
+                <BlogPostList posts={initialPosts} />
               </div>
             </main>
           </div>
@@ -166,4 +176,10 @@ const JobBoard = () => {
   );
 };
 
-export default JobsPageContent;
+export default BlogPageContent;
+function useLazyGetPostsQuery(): [
+  any,
+  { data: any; error: any; isLoading: any }
+] {
+  throw new Error("Function not implemented.");
+}

@@ -1,10 +1,11 @@
+import { FiltersState } from "@/global-interfaces";
 import { PostApiResponse } from "@/services/postService";
 
 export interface PostDataSource {
   getPosts: () => Promise<PostApiResponse>;
   getPostSlugs: () => Promise<string[]>;
   getPostBySlug: (slug: string) => Promise<PostData>;
-  // searchJobs: (query: JobSearchQuery) => Promise<JobApiResponse>;
+  searchPosts: (query: FiltersState) => Promise<PostApiResponse>;
 }
 
 export interface PostData {
@@ -16,7 +17,7 @@ export interface Post {
   title: string;
   content: string;
   featuredImage: string;
-  featured: boolean;
+  isFeatured: boolean;
   slug: string;
   createdAt: string;
   updatedAt: string;
@@ -74,32 +75,32 @@ export interface ProfileImage {
   updatedAt: string;
 }
 
-export interface CategoriesField {
-  data: CategoriesData;
+export interface Categories {
+  data: CategoriesData[];
 }
 
 export interface CategoriesData {
   id: number;
-  attributes: Categories;
+  attributes: Category;
 }
 
-export interface Categories {
+export interface Category {
   name: string;
   slug: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface PostTagsField {
-  data: PostTagsData;
+export interface PostTags {
+  data: PostTagsData[];
 }
 
 export interface PostTagsData {
   id: number;
-  attributes: PostTags;
+  attributes: PostTag;
 }
 
-export interface PostTags {
+export interface PostTag {
   name: string;
   slug: string;
   createdAt: string;

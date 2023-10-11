@@ -4,11 +4,11 @@ const CheckboxGroupJobTypes = () => {
   //   const { sideBarFormState, setSideBarFormState, setCurrentPage } = useJobs();
 
   const jobTypesOptions = [
-    { value: "asian", display: "Asian" },
-    { value: "fine-dining", display: "Fine Dining" },
-    { value: "fastfood", display: "Fastfood" },
-    { value: "bar-lounge", display: "Bar/Lounge" },
-    { value: "mexican", display: "Mexican" },
+    { value: "angular", display: "Angular" },
+    { value: "reactjs", display: "React.js" },
+    { value: "nextjs", display: "Next.js" },
+    { value: "vuejs", display: "Vue.js" },
+    { value: "docker", display: "Docker" },
   ];
 
   const handleJobTypeSelect = (

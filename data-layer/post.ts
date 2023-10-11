@@ -1,6 +1,7 @@
 import qs from "qs";
 import postService, { PostApiResponse } from "@/services/postService";
 import { PostData } from "./post-entities";
+import { FiltersState } from "@/global-interfaces";
 
 // GETS ALL POSTS
 export const getPosts = async (): Promise<PostApiResponse> => {
@@ -62,4 +63,69 @@ export const getPostBySlug = async (slug: string): Promise<PostData> => {
   const rawCompany = await postService.getOneBySlug(query);
 
   return rawCompany;
+};
+
+// POST SEARCH AND FILTERS
+type StrapiQuery = {
+  populate: string[];
+  filters: { [key: string]: any };
+};
+
+// SEARCH & FILTER ALL POSTS
+export const searchPosts = async (
+  query: FiltersState
+): Promise<PostApiResponse> => {
+  const strapiQuery: StrapiQuery = {
+    populate: ["categories", "post_tags"],
+    filters: {},
+  };
+
+  // Add Boolean Query Filters
+  if (query.isFeatured) strapiQuery.filters["isFeatured"] = { $eq: true };
+
+  // Add Full Text Search Query
+  type BasicFilter = {
+    $containsi?: string;
+    $eq?: boolean | string;
+    $in?: string[];
+    $gte?: number;
+    $lte?: number;
+  };
+
+  type SearchField = {
+    [key: string]: string | BasicFilter | NestedSearchField;
+  };
+
+  type NestedSearchField = {
+    [key: string]: BasicFilter;
+  };
+
+  if (query.searchTerm) {
+    const searchFields = [
+      "title",
+      "content",
+      "slug",
+      "categories.name",
+      "post_tags.name",
+    ];
+
+    strapiQuery["filters"]["$or"] = searchFields.map((field): SearchField => {
+      const searchField: SearchField = {};
+
+      if (!field.includes(".")) {
+        searchField[field] = { $containsi: query.searchTerm };
+      } else {
+        const [level1, level2] = field.split(".");
+        const nestedSearchField: NestedSearchField = {};
+        nestedSearchField[level2] = { $containsi: query.searchTerm };
+        searchField[level1] = nestedSearchField;
+      }
+      return searchField;
+    });
+  }
+
+  const strapiQueryStr = qs.stringify(strapiQuery, { encodeValuesOnly: true });
+  const response = await postService.getAll(strapiQueryStr);
+
+  return response;
 };

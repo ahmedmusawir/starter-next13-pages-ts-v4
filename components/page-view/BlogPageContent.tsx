@@ -1,26 +1,55 @@
-import Head from "next/head";
+import { setPosts } from "@/features/posts/postsSlice";
+import { RootState } from "@/global-interfaces";
+import { PostApiResponse } from "@/services/postService";
 import { Dialog, Transition } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { XMarkIcon, ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
-import PageNotFoundContent from "./PageNotFoundContent";
-import NotFoundContent from "./NotFoundContent";
-import { Page } from "../globals";
-import { Row } from "../ui-ux";
-import SidebarNav from "../ui-ux/SidebarNav";
-import SidebarDesktop from "../ui-ux/SidebarDesktop";
-import SearchForm from "../forms/SearchForm";
+import { ChevronDoubleRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Head from "next/head";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import BlogPostList from "../data-view/BlogPostList";
 import JobSortForm from "../forms/JobSortForm";
-import DataList from "../data-view/DataList";
-import RestaurantList from "../data-view/RestaurantList";
+import SearchForm from "../forms/SearchForm";
+import { Page } from "../globals";
+import SidebarDesktop from "../ui-ux/SidebarDesktop";
+import SidebarNav from "../ui-ux/SidebarNav";
+import {
+  useGetPostsQuery,
+  useLazyGetPostsQuery,
+} from "@/features/posts/apiPosts";
+import Spinner from "../ui-ux/Spinner";
 
-const BlogPageContent = () => {
-  return <JobBoard />;
-};
-
-const JobBoard = () => {
+const BlogPageContent = ({
+  initialPosts,
+}: {
+  initialPosts: PostApiResponse;
+}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  //   const { jobs } = useJobs();
+  const dispatch = useDispatch();
+  const filters = useSelector((state: RootState) => state.postsFilters);
+  const {
+    data: posts,
+    error: postError,
+    isLoading: postIsLoading,
+  } = useGetPostsQuery(filters);
+  const [getPosts, { data, error, isLoading }] = useLazyGetPostsQuery();
+  // console.log("Filters in BlogPageContent", filters);
+  const initialMount = useRef(true);
+
+  // KEEP THIS SHIT FOR TESTING
+  // const entireState = useSelector((state: RootState) => state);
+  // console.log(entireState);
+
+  useEffect(() => {
+    dispatch(setPosts(initialPosts));
+  }, [initialPosts, dispatch]);
+
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+    } else {
+      getPosts(filters);
+    }
+  }, [filters]);
 
   return (
     <>
@@ -144,19 +173,10 @@ const JobBoard = () => {
 
             {/* <main className="pb-10 min-h-full  border-8 border-green-500"> */}
             <main className="pb-10 min-h-full">
+              {postIsLoading && <Spinner />}
               <div className="">
-                {/* Your content */}
-
-                {/* <Row className="mx-auto"> */}
-                <RestaurantList />
-                {/* <DataList /> */}
-                {/* <h1 className="h1 text-center mb-5">Recent Jobs</h1> */}
-                {/* {jobs && jobs.data.length > 0 ? (
-                    <JobList jobs={jobs} />
-                  ) : (
-                    <NotFoundContent contentName="Jobs" />
-                  )} */}
-                {/* </Row> */}
+                {posts && <BlogPostList posts={posts} />}
+                {/* <BlogPostList posts={initialPosts} /> */}
               </div>
             </main>
           </div>

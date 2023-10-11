@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
-// import { useJobs } from "@/contexts/JobContext";
+import { useDispatch } from "react-redux";
+import { toggleIsFeatured } from "@/features/posts/postsFilterSlice";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -13,35 +14,11 @@ interface SwitchProps {
 
 const SwitchButton = ({ labelText, filter }: SwitchProps) => {
   const [enabled, setEnabled] = useState(false);
-  //   const { sideBarFormState, setSideBarFormState, setCurrentPage } = useJobs();
-
-  // console.log('Prev State:', sideBarFormState);
+  const dispatch = useDispatch();
 
   const handleChange = (checked: boolean) => {
     setEnabled(checked);
-    // setCurrentPage(1);
-
-    // switch (filter) {
-    //   case "remoteOk":
-    //     console.log("Remote Switch Checked:", checked);
-    //     setSideBarFormState((prevState) => {
-    //       return { ...prevState, remoteOk: checked };
-    //     });
-    //     break;
-
-    //   case "featured":
-    //     console.log("Featured Switch Checked:", checked);
-    //     setSideBarFormState((prevState) => {
-    //       return {
-    //         ...prevState,
-    //         featured: !prevState.featured,
-    //       };
-    //     });
-    //     break;
-
-    //   default:
-    //     break;
-    // }
+    dispatch(toggleIsFeatured()); // Dispatch the action to update the Redux state
   };
 
   return (

@@ -8,20 +8,25 @@ const CheckboxGroupSalary = () => {
   //   const { sideBarFormState, setSideBarFormState, setCurrentPage } = useJobs();
 
   const baseSalaryRangesOptions = [
-    { value: "<20K", display: "Atlanta", bounds: { min: 0, max: 20000 } },
+    { value: "<20K", display: "Javascript", bounds: { min: 0, max: 20000 } },
     {
       value: "20K-50K",
-      display: "Alpharetta",
+      display: "Typescript",
       bounds: { min: 20001, max: 50000 },
     },
     {
       value: "50K-100K",
-      display: "Savanna",
+      display: "Shell Script",
       bounds: { min: 50001, max: 100000 },
     },
     {
       value: "> 100K",
-      display: "Athens",
+      display: "CSS",
+      bounds: { min: 100001, max: 1000000 },
+    },
+    {
+      value: "> 101K",
+      display: "SCSS",
       bounds: { min: 100001, max: 1000000 },
     },
   ];

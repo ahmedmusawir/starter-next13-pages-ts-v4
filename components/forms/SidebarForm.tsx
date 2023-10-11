@@ -12,11 +12,11 @@ const SidebarForm = () => {
       {/* <SwitchButton labelText="Remote Only" filter="remoteOk" /> */}
       <SwitchButton labelText="Featured Only" filter="featured" />
       <div className="text-sm font-semibold leading-6 text-gray-400 py-5">
-        Cuisines
+        Frameworks
       </div>
       <CheckboxGroupJobTypes />
       <div className="text-sm font-semibold leading-6 text-gray-400 py-5">
-        Locations
+        Languages
       </div>
       <CheckboxGroupSalary />
     </div>

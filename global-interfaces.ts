@@ -1,3 +1,22 @@
+import { PostApiResponse } from "./services/postService";
+
+export interface RootState {
+  posts: PostsState;
+  postsFilters: FiltersState;
+}
+
+export interface FiltersState {
+  searchTerm?: string;
+  isFeatured?: boolean;
+  categoryTerms?: string[];
+  postTagTerms?: string[];
+}
+
+export interface PostsState {
+  posts: PostApiResponse;
+  status: "idle" | "loading" | "failed";
+}
+
 export interface AxiosError {
   response?: {
     status?: number;
