@@ -2,6 +2,7 @@ import qs from "qs";
 import postService, { PostApiResponse } from "@/services/postService";
 import { PostData } from "./post-entities";
 import { FiltersState } from "@/global-interfaces";
+import { generateSearchFields } from "@/utils";
 
 // GETS ALL POSTS
 export const getPosts = async (): Promise<PostApiResponse> => {
@@ -80,13 +81,7 @@ export const searchPosts = async (
   }
 
   const searchFields = query.searchTerm
-    ? [
-        { title: { $containsi: query.searchTerm } },
-        { content: { $containsi: query.searchTerm } },
-        { slug: { $containsi: query.searchTerm } },
-        { "categories.name": { $containsi: query.searchTerm } },
-        { "post_tags.name": { $containsi: query.searchTerm } },
-      ]
+    ? generateSearchFields(query.searchTerm)
     : [];
 
   const strapiQuery = {
@@ -106,6 +101,7 @@ export const searchPosts = async (
   console.log("query in Data Layer:", query);
 
   const strapiQueryStr = qs.stringify(strapiQuery, { encodeValuesOnly: true });
+  console.log("Final Query String in post.ts:", strapiQueryStr);
   const response = await postService.getAll(strapiQueryStr);
 
   return response;

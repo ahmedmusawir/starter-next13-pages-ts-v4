@@ -79,16 +79,6 @@ export const searchPosts = async (
     }
   }
 
-  // const searchFields = query.searchTerm
-  //   ? [
-  //       { title: { $containsi: query.searchTerm } },
-  //       { content: { $containsi: query.searchTerm } },
-  //       { slug: { $containsi: query.searchTerm } },
-  //       { "categories.name": { $containsi: query.searchTerm } },
-  //       { "post_tags.name": { $containsi: query.searchTerm } },
-  //     ]
-  //   : [];
-
   type BasicFilter = {
     $containsi?: string;
     $eq?: boolean | string;
