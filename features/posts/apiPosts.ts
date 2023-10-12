@@ -26,15 +26,8 @@ export const apiPosts = createApi({
           query += `categoryTerms=${filters.categoryTerms.join(",")}&`;
         }
 
-        // if (filters.categoryTerms?.length) {
-        //   query += `categories=${filters.categoryTerms.join(",")}&`;
-        // }
-        // if (filters.categoryTerms?.length) {
-        //   query += `categoryTerms=${filters.categoryTerms}&`;
-        // }
-
         if (filters.postTagTerms?.length) {
-          query += `tags=${filters.postTagTerms.join(",")}&`;
+          query += `postTagTerms=${filters.postTagTerms.join(",")}&`;
         }
 
         return query;

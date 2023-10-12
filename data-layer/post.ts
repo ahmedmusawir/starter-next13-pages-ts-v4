@@ -2,6 +2,7 @@ import qs from "qs";
 import postService, { PostApiResponse } from "@/services/postService";
 import { PostData } from "./post-entities";
 import { FiltersState } from "@/global-interfaces";
+import { generateSearchFields } from "@/utils";
 
 // GETS ALL POSTS
 export const getPosts = async (): Promise<PostApiResponse> => {
@@ -71,6 +72,8 @@ export const searchPosts = async (
   query: FiltersState
 ): Promise<PostApiResponse> => {
   let categoryTermsArray: string[] = [];
+  let postTagTermsArray: string[] = [];
+
   if (query.categoryTerms) {
     if (typeof query.categoryTerms === "string") {
       categoryTermsArray = (query.categoryTerms as string).split(","); // Convert comma-separated string to array
@@ -79,45 +82,17 @@ export const searchPosts = async (
     }
   }
 
-  type BasicFilter = {
-    $containsi?: string;
-    $eq?: boolean | string;
-    $in?: string[];
-    $gte?: number;
-    $lte?: number;
-  };
-
-  type SearchField = {
-    [key: string]: string | BasicFilter | NestedSearchField;
-  };
-
-  type NestedSearchField = {
-    [key: string]: BasicFilter;
-  };
-
-  const searchFields: SearchField[] = [];
-
-  if (query.searchTerm) {
-    const fields = [
-      "title",
-      "content",
-      "slug",
-      "categories.name",
-      "post_tags.name",
-    ];
-
-    fields.forEach((field) => {
-      if (!field.includes(".")) {
-        searchFields.push({ [field]: { $containsi: query.searchTerm } });
-      } else {
-        const [level1, level2] = field.split(".");
-        const nestedSearchField: NestedSearchField = {
-          [level2]: { $containsi: query.searchTerm },
-        };
-        searchFields.push({ [level1]: nestedSearchField });
-      }
-    });
+  if (query.postTagTerms) {
+    if (typeof query.postTagTerms === "string") {
+      postTagTermsArray = (query.postTagTerms as string).split(","); // Convert comma-separated string to array
+    } else {
+      postTagTermsArray = query.postTagTerms as string[];
+    }
   }
+
+  const searchFields = query.searchTerm
+    ? generateSearchFields(query.searchTerm)
+    : [];
 
   const strapiQuery = {
     populate: ["categories", "post_tags"],
@@ -126,8 +101,8 @@ export const searchPosts = async (
       ...(categoryTermsArray.length && {
         categories: { id: { $in: categoryTermsArray.map(Number) } },
       }),
-      ...(query.postTagTerms?.length && {
-        post_tags: { id: { $in: query.postTagTerms.map(Number) } },
+      ...(postTagTermsArray?.length && {
+        post_tags: { id: { $in: postTagTermsArray.map(Number) } },
       }),
       ...(searchFields.length > 0 && { $or: searchFields }),
     },

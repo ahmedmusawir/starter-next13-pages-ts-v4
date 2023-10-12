@@ -12,18 +12,12 @@ const CheckboxGroupCategories = () => {
     (state: RootState) => state.postsFilters.categoryTerms
   );
 
-  // const frameworkOptions = [
-  //   { value: "angular", display: "Angular" },
-  //   { value: "react-js", display: "React.js" },
-  //   { value: "next-js", display: "Next.js" },
-  //   { value: "vue-js", display: "Vue.js" },
-  //   { value: "docker", display: "Docker" },
-  // ];
-
   const frameworkOptions = [
     { value: "2", display: "React.js" },
     { value: "1", display: "Next.js" },
     { value: "3", display: "Docker" },
+    { value: "4", display: "Angular" },
+    { value: "5", display: "Vue.js" },
   ];
 
   const handleCategorySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
