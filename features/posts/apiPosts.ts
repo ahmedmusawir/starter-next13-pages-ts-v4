@@ -23,8 +23,15 @@ export const apiPosts = createApi({
         }
 
         if (filters.categoryTerms?.length) {
-          query += `categories=${filters.categoryTerms.join(",")}&`;
+          query += `categoryTerms=${filters.categoryTerms.join(",")}&`;
         }
+
+        // if (filters.categoryTerms?.length) {
+        //   query += `categories=${filters.categoryTerms.join(",")}&`;
+        // }
+        // if (filters.categoryTerms?.length) {
+        //   query += `categoryTerms=${filters.categoryTerms}&`;
+        // }
 
         if (filters.postTagTerms?.length) {
           query += `tags=${filters.postTagTerms.join(",")}&`;

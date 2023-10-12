@@ -79,55 +79,15 @@ export const searchPosts = async (
     }
   }
 
-  // const searchFields = query.searchTerm
-  //   ? [
-  //       { title: { $containsi: query.searchTerm } },
-  //       { content: { $containsi: query.searchTerm } },
-  //       { slug: { $containsi: query.searchTerm } },
-  //       { "categories.name": { $containsi: query.searchTerm } },
-  //       { "post_tags.name": { $containsi: query.searchTerm } },
-  //     ]
-  //   : [];
-
-  type BasicFilter = {
-    $containsi?: string;
-    $eq?: boolean | string;
-    $in?: string[];
-    $gte?: number;
-    $lte?: number;
-  };
-
-  type SearchField = {
-    [key: string]: string | BasicFilter | NestedSearchField;
-  };
-
-  type NestedSearchField = {
-    [key: string]: BasicFilter;
-  };
-
-  const searchFields: SearchField[] = [];
-
-  if (query.searchTerm) {
-    const fields = [
-      "title",
-      "content",
-      "slug",
-      "categories.name",
-      "post_tags.name",
-    ];
-
-    fields.forEach((field) => {
-      if (!field.includes(".")) {
-        searchFields.push({ [field]: { $containsi: query.searchTerm } });
-      } else {
-        const [level1, level2] = field.split(".");
-        const nestedSearchField: NestedSearchField = {
-          [level2]: { $containsi: query.searchTerm },
-        };
-        searchFields.push({ [level1]: nestedSearchField });
-      }
-    });
-  }
+  const searchFields = query.searchTerm
+    ? [
+        { title: { $containsi: query.searchTerm } },
+        { content: { $containsi: query.searchTerm } },
+        { slug: { $containsi: query.searchTerm } },
+        { "categories.name": { $containsi: query.searchTerm } },
+        { "post_tags.name": { $containsi: query.searchTerm } },
+      ]
+    : [];
 
   const strapiQuery = {
     populate: ["categories", "post_tags"],
@@ -146,7 +106,6 @@ export const searchPosts = async (
   console.log("query in Data Layer:", query);
 
   const strapiQueryStr = qs.stringify(strapiQuery, { encodeValuesOnly: true });
-  console.log("Final Query String in post.ts:", strapiQueryStr);
   const response = await postService.getAll(strapiQueryStr);
 
   return response;

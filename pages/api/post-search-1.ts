@@ -11,6 +11,7 @@ export default async function handler(
 ) {
   // Return the query parameters for debugging purposes
   // res.status(200).json({ query: req.query });
+
   const query = req.query;
   console.log("query in api post-search:", query);
   const posts = await datasource.searchPosts(query);
