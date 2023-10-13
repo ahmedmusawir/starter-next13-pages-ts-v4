@@ -14,7 +14,7 @@ const initialState: PostsState = {
       },
     },
   },
-  status: "idle",
+  status: "published",
 };
 
 const postsSlice = createSlice({

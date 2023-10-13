@@ -10,11 +10,13 @@ export interface FiltersState {
   isFeatured?: boolean;
   categoryTerms?: string[];
   postTagTerms?: string[];
+  currentPage: number;
+  postsPerPage: number;
 }
 
 export interface PostsState {
   posts: PostApiResponse;
-  status: "idle" | "loading" | "failed";
+  status: "published" | "draft" | "review";
 }
 
 export interface AxiosError {

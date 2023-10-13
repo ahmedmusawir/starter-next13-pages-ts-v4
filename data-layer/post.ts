@@ -8,13 +8,7 @@ import { generateSearchFields } from "@/utils";
 export const getPosts = async (): Promise<PostApiResponse> => {
   const query = qs.stringify(
     {
-      populate: [
-        // "comments",
-        // "comments.user",
-        // "comments.user.profileImage",
-        "categories",
-        "post_tags",
-      ],
+      populate: ["categories", "post_tags"],
     },
     {
       encodeValuesOnly: true,
@@ -74,6 +68,10 @@ export const searchPosts = async (
   let categoryTermsArray: string[] = [];
   let postTagTermsArray: string[] = [];
 
+  console.log("Current Page:", query.currentPage);
+  console.log("Posts Per Page:", query.postsPerPage);
+
+  // PROCESSING CATEGORY ID-S STRING INTO ARRAY FOR $in STRAPI FILTER
   if (query.categoryTerms) {
     if (typeof query.categoryTerms === "string") {
       categoryTermsArray = (query.categoryTerms as string).split(","); // Convert comma-separated string to array
@@ -81,7 +79,7 @@ export const searchPosts = async (
       categoryTermsArray = query.categoryTerms as string[];
     }
   }
-
+  // PROCESSING POST TAG ID-S STRING INTO ARRAY FOR $in STRAPI FILTER
   if (query.postTagTerms) {
     if (typeof query.postTagTerms === "string") {
       postTagTermsArray = (query.postTagTerms as string).split(","); // Convert comma-separated string to array
@@ -96,14 +94,25 @@ export const searchPosts = async (
 
   const strapiQuery = {
     populate: ["categories", "post_tags"],
+    // Add pagination parameters
+    "pagination[start]": (query.currentPage - 1) * query.postsPerPage,
+    "pagination[limit]": query.postsPerPage,
+
     filters: {
       ...(query.isFeatured && { isFeatured: { $eq: true } }),
+
       ...(categoryTermsArray.length && {
-        categories: { id: { $in: categoryTermsArray.map(Number) } },
+        categories: {
+          id: { $in: categoryTermsArray.map((catId) => Number(catId)) }, // Converting id string to number
+        },
       }),
+
       ...(postTagTermsArray?.length && {
-        post_tags: { id: { $in: postTagTermsArray.map(Number) } },
+        post_tags: {
+          id: { $in: postTagTermsArray.map((tagId) => Number(tagId)) }, // Converting id string to number
+        },
       }),
+
       ...(searchFields.length > 0 && { $or: searchFields }),
     },
   };

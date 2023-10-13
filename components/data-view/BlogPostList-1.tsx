@@ -2,9 +2,6 @@ import Link from "next/link";
 import Pagination from "./Pagination";
 import { PostApiResponse } from "@/services/postService";
 import { formatDate, getExcerpt } from "@/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/global-interfaces";
-import { setCurrentPage } from "@/features/posts/postsFilterSlice";
 
 const review = 4;
 
@@ -12,24 +9,9 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-// const onPageChange = () => {};
+const onPageChange = () => {};
 
 const BlogPostList = ({ posts }: { posts: PostApiResponse }) => {
-  const dispatch = useDispatch();
-  const currentPage = useSelector(
-    (state: RootState) => state.postsFilters.currentPage
-  );
-  const postsPerPage = useSelector(
-    (state: RootState) => state.postsFilters.postsPerPage
-  );
-
-  console.log("CURRENT PAGE IN BLOGPOSTLIST", currentPage);
-  console.log("POST PER PAGE IN BLOGPOSTLIST", postsPerPage);
-
-  const onPageChange = (newPage: number) => {
-    dispatch(setCurrentPage(newPage));
-    // TODO: Re-fetch data for the new page
-  };
   return (
     <div className="bg-white py-4 sm:py-4">
       {/* <div className="w-full border-8 border-orange-500"> */}
@@ -107,24 +89,12 @@ const BlogPostList = ({ posts }: { posts: PostApiResponse }) => {
               </article>
             ))}
           </div>
-
-          {/* <Pagination
-            currentPage={currentPage}
-            totalPageCount={Math.ceil(
-              posts?.meta?.pagination?.total / posts?.meta?.pagination?.pageSize
-            )}
-            onPageChange={onPageChange}
-            pageSize={posts?.meta?.pagination?.pageSize}
-            totalItemCount={posts?.meta?.pagination?.total}
-          /> */}
           <Pagination
-            currentPage={currentPage}
-            totalPageCount={Math.ceil(
-              posts?.meta?.pagination?.total / postsPerPage
-            )}
+            currentPage={1}
+            totalPageCount={5}
             onPageChange={onPageChange}
-            pageSize={postsPerPage}
-            totalItemCount={posts?.meta?.pagination?.total}
+            pageSize={4}
+            totalItemCount={10}
           />
         </div>
       </div>

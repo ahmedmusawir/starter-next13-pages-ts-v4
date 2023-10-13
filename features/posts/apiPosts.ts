@@ -11,24 +11,27 @@ export const apiPosts = createApi({
     getPosts: builder.query<PostApiResponse, FiltersState>({
       query: (filters) => {
         console.log("Filters in apiPost:", filters);
-        // Construct your query based on the filters
+        // Constructing the query based on the filters
         let query = "post-search?";
 
+        // SEARCH TERM
         if (filters.searchTerm) {
           query += `searchTerm=${filters.searchTerm}&`;
         }
-
+        // FEATURED POSTS
         if (filters.isFeatured) {
           query += "isFeatured=true&";
         }
-
+        // CATEGORY TERMS
         if (filters.categoryTerms?.length) {
-          query += `categoryTerms=${filters.categoryTerms.join(",")}&`;
+          query += `categoryTerms=${filters.categoryTerms}&`;
         }
-
+        // POST TAG TERMS
         if (filters.postTagTerms?.length) {
-          query += `postTagTerms=${filters.postTagTerms.join(",")}&`;
+          query += `postTagTerms=${filters.postTagTerms}&`;
         }
+        // PAGINATION PARAMS
+        query += `currentPage=${filters.currentPage}&postsPerPage=${filters.postsPerPage}&`;
 
         return query;
       },

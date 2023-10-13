@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
 import { useDispatch } from "react-redux";
-import { toggleIsFeatured } from "@/features/posts/postsFilterSlice";
+import {
+  setCurrentPage,
+  toggleIsFeatured,
+} from "@/features/posts/postsFilterSlice";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -18,6 +21,8 @@ const SwitchButton = ({ labelText, filter }: SwitchProps) => {
 
   const handleChange = (checked: boolean) => {
     setEnabled(checked);
+    dispatch(setCurrentPage(1));
+
     dispatch(toggleIsFeatured()); // Dispatch the action to update the Redux state
   };
 

@@ -1,6 +1,7 @@
 import {
   addPostTagTerm,
   removePostTagTerm,
+  setCurrentPage,
 } from "@/features/posts/postsFilterSlice";
 import { RootState } from "@/global-interfaces";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +30,7 @@ const CheckboxGroupPostTags = () => {
 
   const handlePostTagsSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
+    dispatch(setCurrentPage(1));
 
     if (checked) {
       dispatch(addPostTagTerm(value)); // If checked, add the postTags term

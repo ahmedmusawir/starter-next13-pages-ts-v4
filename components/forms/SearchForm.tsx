@@ -1,4 +1,7 @@
-import { setSearchTerm } from "@/features/posts/postsFilterSlice";
+import {
+  setCurrentPage,
+  setSearchTerm,
+} from "@/features/posts/postsFilterSlice";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -16,6 +19,8 @@ const SearchForm = () => {
     e.preventDefault();
 
     if (e.key === "Enter") {
+      dispatch(setCurrentPage(1));
+
       dispatch(setSearchTerm(inputValue)); // Use the local state value
     }
   };
