@@ -1,4 +1,3 @@
-// /pages/api/current-user.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import { AxiosError } from "@/global-interfaces";
 import strapiApiClient from "@/services/strapiApiClient";

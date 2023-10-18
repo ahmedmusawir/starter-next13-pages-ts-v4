@@ -1,17 +1,56 @@
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useLoginMutation } from "@/features/auth/apiAuth";
+import {
+  authenticationFailure,
+  authenticationSuccess,
+  startLoading,
+} from "@/features/auth/authSlice";
+import { RootState } from "@/global-interfaces";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const [login, { isLoading, isError, data, error }] = useLoginMutation();
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const error = await login(email, password);
-    setErrorMessage(error as any);
+
+    // Indicate loading in the Redux store.
+    dispatch(startLoading());
+
+    login({ identifier: email, password })
+      .unwrap()
+      .then((loginData) => {
+        // Handle successful login.
+        dispatch(authenticationSuccess(loginData.user));
+
+        // Redirect to profile page.
+        router.push("/profile");
+      })
+      .catch((loginError) => {
+        // Handle the error.
+        const serverErrorMessage = loginError?.response?.data?.error;
+        const message = serverErrorMessage || "An unknown error occurred";
+
+        // Update the Redux store with the error message.
+        dispatch(authenticationFailure(message));
+
+        // Update the local state with the error message.
+        setErrorMessage(message);
+      });
   };
 
   return (

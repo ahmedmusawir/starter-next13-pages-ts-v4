@@ -3,24 +3,35 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import LoginForm from "../forms/LoginForm";
 import { useAuth } from "@/contexts/AuthContext";
-
-// interface Props {
-//   open: boolean;
-//   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-// }
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/global-interfaces";
+import { closeLoginModal } from "@/features/auth/authSlice";
 
 const LoginModal = () => {
-  const { isAuthenticated, open, setOpen } = useAuth();
+  // const { isAuthenticated, open, setOpen } = useAuth();
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  const loginModalOpen = useSelector(
+    (state: RootState) => state.auth.loginModalOpen
+  );
 
   useEffect(() => {
     if (isAuthenticated) {
-      setOpen(false);
+      dispatch(closeLoginModal());
     }
   }, [isAuthenticated]);
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={loginModalOpen} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => dispatch(closeLoginModal())}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -49,7 +60,7 @@ const LoginModal = () => {
                   <button
                     type="button"
                     className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => setOpen(false)}
+                    onClick={() => dispatch(closeLoginModal())}
                   >
                     <span className="sr-only">Close</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />

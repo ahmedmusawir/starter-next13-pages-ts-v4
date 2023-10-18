@@ -3,7 +3,6 @@ import Link from "next/link";
 import styles from "./Navbar.module.scss";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
-  MagnifyingGlassIcon,
   ShoppingBagIcon,
   Bars3Icon,
   BellIcon,
@@ -13,6 +12,13 @@ import {
 import { useRouter } from "next/router";
 import { useCart } from "@/contexts/CartContext";
 import LoginModal from "../ui-ux/LoginModal";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/global-interfaces";
+import {
+  logout,
+  openLoginModal,
+  closeLoginModal,
+} from "@/features/auth/authSlice";
 import { useAuth } from "@/contexts/AuthContext";
 
 function classNames(...classes: string[]) {
@@ -25,9 +31,19 @@ interface NavLinkProps {
 }
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { setIsCartOpen, cartItems } = useCart();
-  const { isAuthenticated, user, logout, open, setOpen } = useAuth();
+  // const { open, setOpen } = useAuth();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+  const user = useSelector((state: RootState) => state.auth.user);
+  const openModal = useSelector(
+    (state: RootState) => state.auth.loginModalOpen
+  );
+
+  console.log("Open Modal in Navbar", openModal);
 
   const NavLink = ({ href, children }: NavLinkProps) => {
     const isActive = router.pathname === href;
@@ -50,7 +66,7 @@ const Navbar = () => {
     <>
       <LoginModal />
       <Disclosure as="nav" className="bg-gray-800">
-        {({ open }) => (
+        {(open) => (
           <>
             {/* DESKTOP MENU BAR */}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -123,7 +139,7 @@ const Navbar = () => {
                       <button
                         type="button"
                         className="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-indigo-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-3"
-                        onClick={() => setOpen(true)}
+                        onClick={() => dispatch(openLoginModal())}
                       >
                         Login
                       </button>
@@ -190,7 +206,7 @@ const Navbar = () => {
                               {({ active }) => (
                                 <a
                                   href="#"
-                                  onClick={logout}
+                                  onClick={() => dispatch(logout())}
                                   className={classNames(
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
@@ -295,7 +311,7 @@ const Navbar = () => {
                     href="#"
                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                   >
-                    Sign out
+                    Sign out Mobile
                   </Disclosure.Button>
                 </div>
               </div>

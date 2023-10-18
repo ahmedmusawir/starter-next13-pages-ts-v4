@@ -3,6 +3,15 @@ import { PostApiResponse } from "./services/postService";
 export interface RootState {
   posts: PostsState;
   postsFilters: FiltersState;
+  auth: AuthState;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  isLoading: boolean;
+  error: string | null;
+  loginModalOpen: boolean;
 }
 
 export interface FiltersState {
