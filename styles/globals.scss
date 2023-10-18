@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   h1 {
     @apply text-4xl font-bold text-gray-900;

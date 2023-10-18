@@ -1,56 +1,21 @@
-import { StarIcon } from "@heroicons/react/20/solid";
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 import CommentForm from "../forms/CommentForm";
-
-const reviews = {
-  average: 4,
-  totalCount: 1624,
-  counts: [
-    { rating: 5, count: 1019 },
-    { rating: 4, count: 162 },
-    { rating: 3, count: 97 },
-    { rating: 2, count: 199 },
-    { rating: 1, count: 147 },
-  ],
-  featured: [
-    {
-      id: 1,
-      rating: 5,
-      content: `
-        <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
-      `,
-      author: "Emily Selman",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    {
-      id: 2,
-      rating: 5,
-      content: `
-          <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
-        `,
-      author: "Emily Selman",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    {
-      id: 3,
-      rating: 4,
-      content: `
-          <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
-        `,
-      author: "Emily Selman",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    // More reviews...
-  ],
-};
+import { useSelector } from "react-redux";
+import { CommentsData } from "@/data-layer/post-entities";
+import { useAuth } from "@/contexts/AuthContext";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+interface Props {
+  comments: CommentsData;
+}
 
-const Comments = () => {
+const Comments = ({ comments }: Props) => {
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
+  const { isAuthenticated, setOpen } = useAuth();
+
+  console.log("Comments:", comments);
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-32">
@@ -68,14 +33,16 @@ const Comments = () => {
               customers
             </p>
 
-            <a
-              href="#"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
-            >
-              Write a review
-            </a>
+            {!isAuthenticated && (
+              <button
+                className="mt-6 inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
+                onClick={() => setOpen(true)}
+              >
+                Write a review
+              </button>
+            )}
           </div>
-          <CommentForm />
+          {isAuthenticated && <CommentForm />}
         </div>
 
         <div className="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">
@@ -83,32 +50,43 @@ const Comments = () => {
 
           <div className="flow-root">
             <div className="-my-12 divide-y divide-gray-200">
-              {reviews.featured.map((review) => (
-                <div key={review.id} className="py-12">
-                  <div className="flex items-center">
-                    <img
-                      src={review.avatarSrc}
-                      alt={`${review.author}.`}
-                      className="h-12 w-12 rounded-full"
-                    />
-                    <div className="ml-4">
-                      <h4 className="text-sm font-bold text-gray-900">
-                        {review.author}
-                      </h4>
+              {comments.data.map((comment) => {
+                const imgUrl =
+                  comment.attributes.user.data?.attributes.profileImage.data
+                    ?.attributes.url;
 
-                      <p className="text-xs">
-                        {/* Comment Date will go here */}
-                        Sep 3, 2023
-                      </p>
+                return (
+                  <div key={comment.id} className="py-12">
+                    <div className="flex items-center">
+                      {!imgUrl && <UserCircleIcon className="h-12 w-12" />}
+                      {imgUrl && (
+                        <img
+                          src={`${baseUrl}${imgUrl}`}
+                          alt={`${comment.attributes.createdAt}.`}
+                          className="h-12 w-12 rounded-full"
+                        />
+                      )}
+                      <div className="ml-4">
+                        <h4 className="text-sm font-bold text-gray-900">
+                          {comment.attributes.user.data?.attributes.username}
+                        </h4>
+
+                        <p className="text-xs">
+                          {/* Comment Date will go here */}
+                          {comment.attributes.createdAt}
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div
-                    className="mt-4 space-y-6 text-base italic text-gray-600"
-                    dangerouslySetInnerHTML={{ __html: review.content }}
-                  />
-                </div>
-              ))}
+                    <div
+                      className="mt-4 space-y-6 text-base italic text-gray-600"
+                      dangerouslySetInnerHTML={{
+                        __html: comment.attributes.content,
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

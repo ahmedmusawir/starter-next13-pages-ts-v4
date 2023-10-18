@@ -10,9 +10,7 @@ interface Props {
   post: PostData;
 }
 
-const CompanyDetailsContent = ({ post }: Props) => {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_ASSETS_BASE_URL;
-
+const SingleBlogPageContent = ({ post }: Props) => {
   return (
     <>
       <Head>
@@ -50,10 +48,10 @@ const CompanyDetailsContent = ({ post }: Props) => {
           </div>
         </div>
         <hr />
-        <Comments />
+        <Comments comments={post.attributes.comments} />
       </Page>
     </>
   );
 };
 
-export default CompanyDetailsContent;
+export default SingleBlogPageContent;

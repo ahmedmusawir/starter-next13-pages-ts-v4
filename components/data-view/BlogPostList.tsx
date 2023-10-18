@@ -5,6 +5,7 @@ import { formatDate, getExcerpt } from "@/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/global-interfaces";
 import { setCurrentPage } from "@/features/posts/postsFilterSlice";
+import PaginationSimple from "./PaginationSimple";
 
 const review = 4;
 
@@ -23,10 +24,12 @@ const BlogPostList = ({ posts }: { posts: PostApiResponse }) => {
     (state: RootState) => state.postsFilters.postsPerPage
   );
 
-  console.log("CURRENT PAGE IN BLOGPOSTLIST", currentPage);
-  console.log("POST PER PAGE IN BLOGPOSTLIST", postsPerPage);
+  // console.log("CURRENT PAGE IN BLOGPOSTLIST", currentPage);
+  // console.log("POST PER PAGE IN BLOGPOSTLIST", postsPerPage);
 
   const onPageChange = (newPage: number) => {
+    window.scrollTo(0, 0);
+
     dispatch(setCurrentPage(newPage));
     // TODO: Re-fetch data for the new page
   };
@@ -108,16 +111,17 @@ const BlogPostList = ({ posts }: { posts: PostApiResponse }) => {
             ))}
           </div>
 
-          {/* <Pagination
+          <Pagination
             currentPage={currentPage}
             totalPageCount={Math.ceil(
-              posts?.meta?.pagination?.total / posts?.meta?.pagination?.pageSize
+              posts?.meta?.pagination?.total / postsPerPage
             )}
             onPageChange={onPageChange}
-            pageSize={posts?.meta?.pagination?.pageSize}
+            pageSize={postsPerPage}
             totalItemCount={posts?.meta?.pagination?.total}
-          /> */}
-          <Pagination
+          />
+
+          <PaginationSimple
             currentPage={currentPage}
             totalPageCount={Math.ceil(
               posts?.meta?.pagination?.total / postsPerPage

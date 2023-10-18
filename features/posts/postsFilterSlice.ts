@@ -45,6 +45,13 @@ const postsFilterSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
+    resetAll: (state) => {
+      state.searchTerm = "";
+      state.categoryTerms = [];
+      state.postTagTerms = [];
+      state.isFeatured = false;
+      state.currentPage = 1;
+    },
   },
 });
 
@@ -58,5 +65,6 @@ export const {
   addPostTagTerm,
   removePostTagTerm,
   setCurrentPage,
+  resetAll,
 } = postsFilterSlice.actions;
 export default postsFilterSlice.reducer;

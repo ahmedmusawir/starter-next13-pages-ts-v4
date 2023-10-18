@@ -21,12 +21,21 @@ export interface Post {
   slug: string;
   createdAt: string;
   updatedAt: string;
-  comments: Comments;
+  comments: CommentsData;
   categories: Categories;
   post_tags: PostTags;
 }
 
+export interface CommentsData {
+  data: Comments[];
+}
+
 export interface Comments {
+  id: number;
+  attributes: Comment;
+}
+
+export interface Comment {
   content: string;
   createdAt: string;
   updatedAt: string;
