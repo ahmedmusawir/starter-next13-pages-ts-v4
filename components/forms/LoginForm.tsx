@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
 import { useLoginMutation } from "@/features/auth/apiAuth";
 import {
   authenticationFailure,
   authenticationSuccess,
   startLoading,
 } from "@/features/auth/authSlice";
-import { RootState } from "@/global-interfaces";
+import { ApiError, RootState } from "@/global-interfaces";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -36,13 +35,16 @@ const LoginForm = () => {
       .then((loginData) => {
         // Handle successful login.
         dispatch(authenticationSuccess(loginData.user));
+        console.log("loginData", loginData);
 
         // Redirect to profile page.
         router.push("/profile");
       })
-      .catch((loginError) => {
+      .catch((rawError) => {
+        const error = rawError as ApiError;
+        console.error("Error during signup:", error);
         // Handle the error.
-        const serverErrorMessage = loginError?.response?.data?.error;
+        const serverErrorMessage = error?.data?.error;
         const message = serverErrorMessage || "An unknown error occurred";
 
         // Update the Redux store with the error message.

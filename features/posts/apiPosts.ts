@@ -1,3 +1,4 @@
+import { PostData } from "@/data-layer/post-entities";
 import { FiltersState } from "@/global-interfaces";
 import { PostApiResponse } from "@/services/postService";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -35,6 +36,7 @@ export const apiPosts = createApi({
 
         return query;
       },
+      // keepUnusedDataFor: 0, // to disable caching completely
     }),
   }),
 });

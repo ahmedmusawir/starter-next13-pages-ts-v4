@@ -1,7 +1,7 @@
-import { AuthProvider } from "@/contexts/AuthContext";
+import { store, persistor } from "@/store/store";
+import { PersistGate } from "redux-persist/integration/react";
 import { CartProvider } from "@/contexts/CartContext";
 import { ProductProvider } from "@/contexts/ProductContext";
-import { store } from "@/store/store";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
@@ -11,8 +11,8 @@ import { ToastContainer } from "react-toastify";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      <Provider store={store}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
           <ProductProvider>
             <CartProvider>
@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </CartProvider>
           </ProductProvider>
         </ThemeProvider>
-      </Provider>
-    </AuthProvider>
+      </PersistGate>
+    </Provider>
   );
 }

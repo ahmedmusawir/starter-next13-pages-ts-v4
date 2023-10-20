@@ -92,6 +92,7 @@ const BlogPostList = ({ posts }: { posts: PostApiResponse }) => {
                       Featured
                     </span>
                   )}
+                  {/* {post.attributes.comments.data.map((com) => com.id)} */}
                   <div className="mt-3 border-t border-gray-900/5 pt-6">
                     <div className="relative flex items-center gap-x-4 justify-between">
                       <div className="flex items-center gap-x-4 text-xs">

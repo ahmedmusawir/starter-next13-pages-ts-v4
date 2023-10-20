@@ -42,6 +42,11 @@ class HttpService<T> {
     const res = await StrapiApiClient.get(`${this.endpoint}?${query}`);
     return res.data.data[0];
   }
+
+  async getOneById(query?: string): Promise<T> {
+    const res = await StrapiApiClient.get(`${this.endpoint}?${query}`);
+    return res.data.data[0];
+  }
 }
 
 export default HttpService;

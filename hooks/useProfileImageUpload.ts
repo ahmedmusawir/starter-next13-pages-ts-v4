@@ -1,13 +1,17 @@
 import { useForm } from "react-hook-form";
 import { uploadImage } from "@/services/strapiApiClient";
 import { User } from "@/global-interfaces";
+import { useDispatch } from "react-redux";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface Props {
   user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setUser: ActionCreatorWithPayload<any, "auth/setUser">;
 }
 
 const useProfileImageUpload = ({ user, setUser }: Props) => {
+  const dispatch = useDispatch();
+
   const { register, handleSubmit, watch } = useForm();
   const selectedFile = watch("profileImage");
 
@@ -48,7 +52,7 @@ const useProfileImageUpload = ({ user, setUser }: Props) => {
 
       // console.log("Updated User Image Data:", updatedUserDataWithImage);
 
-      setUser(updatedUserDataWithImage);
+      dispatch(setUser(updatedUserDataWithImage));
     } catch (error) {
       console.error("Error uploading image:", error);
     }

@@ -1,14 +1,53 @@
-import { useAuth } from "@/contexts/AuthContext";
+import { ApiError, RootState } from "@/global-interfaces";
+import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useCreateCommentMutation } from "@/features/comments/apiComments";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const CommentForm = () => {
+const CommentForm = ({ postId }: { postId: number | undefined }) => {
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
-
-  const { user } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
   const profileImage = user?.profileImage.url;
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  console.log("UserID in comment form:", user?.id);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const dispatch = useDispatch();
+  const [createComment] = useCreateCommentMutation();
+
+  const onSubmit = async (data: any) => {
+    try {
+      await createComment({
+        content: data.comment,
+        postId: postId,
+        userId: user?.id,
+      });
+      console.log("Commenting successful:");
+      setErrorMessage(null); // Clear any previous error messages
+      toast.success("Commenting successful! Please login.");
+    } catch (rawError) {
+      const error = rawError as ApiError;
+      console.error("Error during Commenting:", error);
+
+      // Check if the error has a specific message from the server
+      const serverErrorMessage = error?.data?.error;
+      const message = serverErrorMessage || "An unknown error occurred";
+
+      setErrorMessage(message);
+      toast.error("Error during Commenting. Please try again.");
+    }
+  };
 
   return (
     <div className="flex items-start space-x-4 mt-5">
@@ -20,28 +59,24 @@ const CommentForm = () => {
         />
       </div>
       <div className="min-w-0 flex-1">
-        <form action="#" className="relative">
+        <form onSubmit={handleSubmit(onSubmit)} className="relative">
           <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
             <label htmlFor="comment" className="sr-only">
               Add your comment
             </label>
             <textarea
-              rows={3}
-              name="comment"
-              id="comment"
+              rows={6}
+              {...register("comment", { required: "Comment is required" })}
               className="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 pl-5 pt-3"
               placeholder="Add your comment..."
-              defaultValue={""}
             />
-
-            {/* Spacer element to match the height of the toolbar */}
-            <div className="py-2" aria-hidden="true">
-              {/* Matches height of button in toolbar (1px border + 36px content height) */}
-              <div className="py-px">
-                <div className="h-9" />
-              </div>
-            </div>
           </div>
+
+          {errors.comment?.message && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.comment.message as string}
+            </span>
+          )}
 
           <div className="absolute inset-x-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
             <div className="flex-shrink-0">

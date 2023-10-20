@@ -1,14 +1,17 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { useSignupMutation } from "@/features/auth/apiAuth";
+import { closeLoginModal, openLoginModal } from "@/features/auth/authSlice";
+import { ApiError, RootState } from "@/global-interfaces";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const SignupForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { login, setOpen } = useAuth();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [signup, { isLoading, isError, data, error }] = useSignupMutation();
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -20,45 +23,27 @@ const SignupForm = () => {
     console.log("Signup Form Data:", data);
 
     try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
-      });
+      const result = await signup({ username, email, password }).unwrap();
 
-      const responseData = await response.json();
-
-      if (response.ok) {
-        console.log("Signup successful:", responseData);
-        setErrorMessage(null); // Clear any previous error messages
-        toast.success("Signup successful! Please login.");
-      } else {
-        console.error("Error during signup:", responseData);
-        // Handle the error, e.g., show an error message to the user
-        setErrorMessage(responseData.error);
-        toast.error("Error during signup. Please try again.");
-      }
-    } catch (error) {
+      console.log("Signup successful:", result);
+      setErrorMessage(null); // Clear any previous error messages
+      toast.success("Signup successful! Please login.");
+    } catch (rawError) {
+      const error = rawError as ApiError;
       console.error("Error during signup:", error);
-      // Handle unexpected errors, e.g., network issues
-      setErrorMessage("An unexpected error occurred.");
+
+      // Check if the error has a specific message from the server
+      const serverErrorMessage = error?.data?.error;
+      const message = serverErrorMessage || "An unknown error occurred";
+
+      setErrorMessage(message);
       toast.error("Error during signup. Please try again.");
     }
   };
 
   useEffect(() => {
-    setOpen(false);
+    dispatch(closeLoginModal());
   }, []);
-
-  const openLoginModal = () => {
-    setOpen(true);
-  };
 
   return (
     <>
@@ -173,7 +158,7 @@ const SignupForm = () => {
             <a
               href="#"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-              onClick={openLoginModal}
+              onClick={() => dispatch(openLoginModal())}
             >
               Login
             </a>

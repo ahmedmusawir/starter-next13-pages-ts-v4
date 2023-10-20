@@ -1,8 +1,9 @@
-import { useAuth } from "@/contexts/AuthContext";
+import { RootState } from "@/global-interfaces";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
+import { useSelector } from "react-redux";
 
 const UserProfileHeader = () => {
-  const { user } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <>

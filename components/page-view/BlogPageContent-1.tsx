@@ -13,7 +13,6 @@ import { Page } from "../globals";
 import SidebarDesktop from "../ui-ux/SidebarDesktop";
 import SidebarNav from "../ui-ux/SidebarNav";
 import {
-  apiPosts, // THIS IS NEEDED TO CLEAR CACHE CODE. DON'T REMOVE
   useGetPostsQuery,
   useLazyGetPostsQuery,
 } from "@/features/posts/apiPosts";
@@ -24,6 +23,8 @@ const BlogPageContent = ({
 }: {
   initialPosts: PostApiResponse;
 }) => {
+  const [skipFetching, setSkipFetching] = useState(true);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.postsFilters);
@@ -32,27 +33,24 @@ const BlogPageContent = ({
     data: posts,
     error: postError,
     isLoading: postIsLoading,
-  } = useGetPostsQuery(filters);
+  } = useGetPostsQuery(filters, { skip: skipFetching });
 
   const [getPosts, { data, error, isLoading }] = useLazyGetPostsQuery();
+  // console.log("Filters in BlogPageContent", filters);
   const initialMount = useRef(true);
 
-  // THIS IS TO CLEAR THE RTK CACHE. DON'T REMOVE
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(apiPosts.util.resetApiState());
-  //   };
-  // }, [dispatch]);
-
-  // KEEP THIS SHIT FOR TESTING. TO SEE THE ENTIRE STATE
+  // KEEP THIS SHIT FOR TESTING
   // const entireState = useSelector((state: RootState) => state);
   // console.log(entireState);
 
-  useEffect(() => {
-    dispatch(setPosts(initialPosts));
-  }, [initialPosts, dispatch]);
+  console.log("Blog Page Posts:", posts);
 
-  // console.log("Blog Page Posts:", posts);
+  useEffect(() => {
+    setSkipFetching(false);
+
+    dispatch(setPosts(initialPosts));
+    // dispatch(setPosts(initialPosts));
+  }, [initialPosts, dispatch]);
 
   useEffect(() => {
     if (initialMount.current) {

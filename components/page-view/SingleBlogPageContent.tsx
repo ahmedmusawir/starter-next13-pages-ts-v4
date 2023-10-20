@@ -48,7 +48,8 @@ const SingleBlogPageContent = ({ post }: Props) => {
           </div>
         </div>
         <hr />
-        <Comments comments={post.attributes.comments} />
+        {/* <Comments comments={post.attributes.comments} /> THIS IS THE SSG BASED IMPLEMENTATION DON'T REMOVE*/}
+        <Comments postId={post.id} />
       </Page>
     </>
   );

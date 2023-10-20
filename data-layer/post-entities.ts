@@ -5,6 +5,7 @@ export interface PostDataSource {
   getPosts: () => Promise<PostApiResponse>;
   getPostSlugs: () => Promise<string[]>;
   getPostBySlug: (slug: string) => Promise<PostData>;
+  getPostById: (postId: number) => Promise<PostData>;
   searchPosts: (query: FiltersState) => Promise<PostApiResponse>;
 }
 

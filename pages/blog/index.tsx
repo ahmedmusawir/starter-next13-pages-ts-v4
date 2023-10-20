@@ -5,6 +5,7 @@ import { PostApiResponse } from "@/services/postService";
 import datasource from "@/data-layer";
 
 const BlogPage = ({ initialPosts }: { initialPosts: PostApiResponse }) => {
+  console.log("index pg posts", initialPosts);
   return <BlogPageContent initialPosts={initialPosts} />;
 };
 

@@ -1,28 +1,37 @@
 import { UserCircleIcon } from "@heroicons/react/20/solid";
 import CommentForm from "../forms/CommentForm";
 import { useDispatch, useSelector } from "react-redux";
+import { CommentsData } from "@/data-layer/post-entities";
 import { RootState } from "@/global-interfaces";
 import { openLoginModal } from "@/features/auth/authSlice";
-import { useGetPostByIdQuery } from "@/features/comments/apiComments";
+import { useGetPostsQuery } from "@/features/posts/apiPosts";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 const Comments = ({ postId }: { postId: number }) => {
+  // const Comments = () => {
   const dispatch = useDispatch();
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-
+  const filters = useSelector((state: RootState) => state.postsFilters);
   const {
-    data: post,
+    data: posts,
     error: postError,
     isLoading: postIsLoading,
-  } = useGetPostByIdQuery(postId);
+  } = useGetPostsQuery(filters);
 
-  let comments = post?.attributes?.comments?.data;
+  console.log("Comments:", posts?.data);
+
+  let post = posts?.data.find((p) => p.id === postId);
+  let comments = post?.attributes.comments;
+  // let comments = post?.attributes?.comments?.data;
+
+  console.log("Filtered Post:", post);
+  console.log("Comments:", comments);
 
   return (
     <div className="bg-white">
@@ -50,7 +59,7 @@ const Comments = ({ postId }: { postId: number }) => {
               </button>
             )}
           </div>
-          {isAuthenticated && <CommentForm postId={post?.id} />}
+          {isAuthenticated && <CommentForm />}
         </div>
 
         <div className="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">
@@ -58,15 +67,15 @@ const Comments = ({ postId }: { postId: number }) => {
 
           <div className="flow-root">
             <div className="-my-12 divide-y divide-gray-200">
-              {comments?.length === 0 && (
+              {comments?.data.length === 0 && (
                 <div className="flex item-center p-10">
                   <h2 className="text-lg font-bold text-gray-900">
                     No comment found!
                   </h2>
                 </div>
               )}
-              {comments?.length !== 0 &&
-                comments?.map((comment) => {
+              {comments?.data.length !== 0 &&
+                comments?.data.map((comment) => {
                   const imgUrl =
                     comment.attributes.user.data?.attributes.profileImage.data
                       ?.attributes.url;
@@ -88,6 +97,7 @@ const Comments = ({ postId }: { postId: number }) => {
                           </h4>
 
                           <p className="text-xs">
+                            {/* Comment Date will go here */}
                             {comment.attributes.createdAt}
                           </p>
                         </div>

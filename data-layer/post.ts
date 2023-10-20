@@ -8,7 +8,13 @@ import { generateSearchFields } from "@/utils";
 export const getPosts = async (): Promise<PostApiResponse> => {
   const query = qs.stringify(
     {
-      populate: ["categories", "post_tags"],
+      populate: [
+        "comments",
+        "comments.user",
+        "comments.user.profileImage",
+        "categories",
+        "post_tags",
+      ],
     },
     {
       encodeValuesOnly: true,
@@ -55,9 +61,37 @@ export const getPostBySlug = async (slug: string): Promise<PostData> => {
     }
   );
 
-  const rawCompany = await postService.getOneBySlug(query);
+  const rawPost = await postService.getOneBySlug(query);
 
-  return rawCompany;
+  return rawPost;
+};
+
+// GETS SINGLE POST BY IT'S ID
+export const getPostById = async (postId: number): Promise<PostData> => {
+  const query = qs.stringify(
+    {
+      populate: [
+        "comments",
+        "comments.user",
+        "comments.user.profileImage",
+        "categories",
+        "post_tags",
+      ],
+
+      filters: {
+        id: {
+          $eq: postId,
+        },
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    }
+  );
+
+  const rawPost = await postService.getOneById(query);
+
+  return rawPost;
 };
 
 // POST SEARCH AND FILTERS

@@ -1,8 +1,12 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { setUser } from "@/features/auth/authSlice";
+import { RootState } from "@/global-interfaces";
 import useProfileImageUpload from "@/hooks/useProfileImageUpload";
+import { useDispatch, useSelector } from "react-redux";
 
 const UploadProfileImage = () => {
-  const { user, setUser } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
+
   const { register, handleSubmit } = useProfileImageUpload({ user, setUser });
 
   return (

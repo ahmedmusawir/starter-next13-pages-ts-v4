@@ -6,8 +6,6 @@ import UploadProfileImage from "../ui-ux/UploadProfileImage";
 import UserProfileHeader from "../ui-ux/UserProfileHeader";
 
 const ProfileContent = () => {
-  const { user, setUser } = useAuth();
-
   return (
     <>
       <Head>

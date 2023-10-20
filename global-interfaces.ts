@@ -6,6 +6,13 @@ export interface RootState {
   auth: AuthState;
 }
 
+export interface ApiError {
+  data?: {
+    error?: string;
+  };
+  status?: number;
+}
+
 export interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
