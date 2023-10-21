@@ -86,7 +86,7 @@ const Hero = () => {
                   <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                     <div className="relative">
                       <img
-                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676159695/cld-sample-4.jpg"
+                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676555559/of6ggh4y9ufc6rrrana5.png"
                         alt=""
                         className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                       />
@@ -96,7 +96,7 @@ const Hero = () => {
                   <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
                     <div className="relative">
                       <img
-                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1693546208/25794729_csmbnh.webp"
+                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676159675/samples/animals/reindeer.jpg"
                         alt=""
                         className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                       />
@@ -104,7 +104,7 @@ const Hero = () => {
                     </div>
                     <div className="relative">
                       <img
-                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676159676/samples/food/fish-vegetables.jpg"
+                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676555386/uxo5jtdnmpjsbnr8xxeo.png"
                         alt=""
                         className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                       />
@@ -114,7 +114,7 @@ const Hero = () => {
                   <div className="w-44 flex-none space-y-8 pt-32 sm:pt-12">
                     <div className="relative">
                       <img
-                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1693546209/39483521_awhwaf.webp"
+                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676895764/mybeuvhrrgdnw4tlhmfr.png"
                         alt=""
                         className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                       />
@@ -122,7 +122,7 @@ const Hero = () => {
                     </div>
                     <div className="relative">
                       <img
-                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1693546208/53263122_sq361z.webp"
+                        src="https://res.cloudinary.com/dyb0qa58h/image/upload/v1676555708/w937cy9tepipkbjm0d4c.png"
                         alt=""
                         className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                       />

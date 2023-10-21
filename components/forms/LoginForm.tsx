@@ -38,7 +38,7 @@ const LoginForm = () => {
         console.log("loginData", loginData);
 
         // Redirect to profile page.
-        router.push("/profile");
+        // router.push("/profile");
       })
       .catch((rawError) => {
         const error = rawError as ApiError;

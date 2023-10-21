@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   setCurrentPage,
-  setSwitchButtonEnabled,
   toggleIsFeatured,
 } from "@/features/posts/postsFilterSlice";
-import { RootState } from "@/global-interfaces";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -18,14 +16,11 @@ interface SwitchProps {
 }
 
 const SwitchButton = ({ labelText, filter }: SwitchProps) => {
-  // const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(false);
   const dispatch = useDispatch();
-  const enabled = useSelector(
-    (state: RootState) => state.postsFilters.switchButtonEnabled
-  );
 
   const handleChange = (checked: boolean) => {
-    dispatch(setSwitchButtonEnabled());
+    setEnabled(checked);
     dispatch(setCurrentPage(1));
 
     dispatch(toggleIsFeatured()); // Dispatch the action to update the Redux state

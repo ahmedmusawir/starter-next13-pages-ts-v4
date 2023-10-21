@@ -8,17 +8,6 @@ export const apiComments = createApi({
     baseUrl: "/api",
   }),
   endpoints: (builder) => ({
-    // getPostById: builder.query<PostData, number>({
-    //   query: (postId) => `post-by-id?id=${postId}`,
-    //   providesTags: (result) =>
-    //     result?.attributes?.comments?.data
-    //       ? result.attributes.comments.data.map(({ id }: { id: number }) => ({
-    //           type: "Comment",
-    //           id,
-    //         }))
-    //       : [],
-    // }),
-
     getPostById: builder.query<PostData, number>({
       query: (postId) => `post-by-id?id=${postId}`,
       providesTags: [{ type: "Comment", id: "LIST" }],
@@ -37,8 +26,11 @@ export const apiComments = createApi({
     }),
     deleteComment: builder.mutation({
       query: (commentId) => ({
-        url: `/delete-comment/${commentId}`,
+        url: `/delete-comment`,
         method: "DELETE",
+        body: {
+          commentId,
+        },
       }),
       invalidatesTags: [{ type: "Comment", id: "LIST" }],
     }),

@@ -13,13 +13,10 @@ import { useRouter } from "next/router";
 import { useCart } from "@/contexts/CartContext";
 import LoginModal from "../ui-ux/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/global-interfaces";
-import {
-  logout,
-  openLoginModal,
-  closeLoginModal,
-} from "@/features/auth/authSlice";
-import { useAuth } from "@/contexts/AuthContext";
+import { ApiError, RootState } from "@/global-interfaces";
+import { openLoginModal, setLogout } from "@/features/auth/authSlice";
+import { useLogoutMutation } from "@/features/auth/apiAuth";
+import { toast } from "react-toastify";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -31,6 +28,7 @@ interface NavLinkProps {
 }
 
 const Navbar = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
   const dispatch = useDispatch();
   const router = useRouter();
   const { setIsCartOpen, cartItems } = useCart();
@@ -42,9 +40,34 @@ const Navbar = () => {
   const openModal = useSelector(
     (state: RootState) => state.auth.loginModalOpen
   );
+  const [logout, { isLoading, isError, data, error }] = useLogoutMutation();
 
-  console.log("Open Modal in Navbar", openModal);
+  // LOGGING OUT USER FROM BOTH FRONTEND AND BACKEND
+  const onLogout = async () => {
+    await logout({})
+      .unwrap()
+      .then(() => {
+        // Successful logout.
+        dispatch(setLogout());
+        toast.success("Logout Successful!");
 
+        // Redirect to home page.
+        router.push("/");
+      })
+      .catch((rawError) => {
+        const error = rawError as ApiError;
+        console.error("Error during signup:", error);
+        // Handle the error.
+        const serverErrorMessage = error?.data?.error;
+        const message = serverErrorMessage || "An unknown error occurred";
+
+        // Update the local state with the error message.
+        console.log("Server-side error during Logout", message);
+        toast.error("Error during Logout. Please try again.");
+      });
+  };
+
+  // PREPARING THE NAVLINK WITH ACTIVE LINK
   const NavLink = ({ href, children }: NavLinkProps) => {
     const isActive = router.pathname === href;
 
@@ -89,7 +112,7 @@ const Navbar = () => {
                         href="/"
                         className="rounded-md bg-gray-900 px-3 py-2 text-lg font-large text-white"
                       >
-                        Next.js Starter v4 (Redux)
+                        Next.js (Redux)
                       </Link>
                       <nav className="hidden sm:ml-6 sm:flex flex-grow justify-center items-center">
                         <NavLink href="/blog">Blog</NavLink>
@@ -155,7 +178,7 @@ const Navbar = () => {
                             {user?.profileImage?.url ? (
                               <img
                                 alt="User Profile"
-                                src={`http://localhost:1337${user.profileImage.url}`}
+                                src={`${baseUrl}${user.profileImage.url}`}
                                 className="h-10 w-10 rounded-full"
                               />
                             ) : (
@@ -206,7 +229,7 @@ const Navbar = () => {
                               {({ active }) => (
                                 <a
                                   href="#"
-                                  onClick={() => dispatch(logout())}
+                                  onClick={onLogout}
                                   className={classNames(
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"

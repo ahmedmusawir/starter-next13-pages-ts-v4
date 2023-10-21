@@ -8,6 +8,7 @@ const initialState: FiltersState = {
   postTagTerms: [],
   currentPage: 1,
   postsPerPage: 4,
+  switchButtonEnabled: false,
 };
 
 const postsFilterSlice = createSlice({
@@ -51,6 +52,10 @@ const postsFilterSlice = createSlice({
       state.postTagTerms = [];
       state.isFeatured = false;
       state.currentPage = 1;
+      state.switchButtonEnabled = false;
+    },
+    setSwitchButtonEnabled: (state) => {
+      state.switchButtonEnabled = !state.switchButtonEnabled;
     },
   },
 });
@@ -66,5 +71,6 @@ export const {
   removePostTagTerm,
   setCurrentPage,
   resetAll,
+  setSwitchButtonEnabled,
 } = postsFilterSlice.actions;
 export default postsFilterSlice.reducer;

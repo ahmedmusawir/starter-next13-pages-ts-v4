@@ -67,7 +67,43 @@ const Comments = ({ postId }: { postId: number }) => {
                 </div>
               )}
 
-              <CommentList comments={comments} />
+              {comments?.length !== 0 &&
+                comments?.map((comment) => {
+                  const imgUrl =
+                    comment.attributes.user.data?.attributes.profileImage.data
+                      ?.attributes.url;
+
+                  return (
+                    <div key={comment.id} className="py-12">
+                      <div className="flex items-center">
+                        {!imgUrl && <UserCircleIcon className="h-12 w-12" />}
+                        {imgUrl && (
+                          <img
+                            src={`${baseUrl}${imgUrl}`}
+                            alt={`${comment.attributes.createdAt}.`}
+                            className="h-12 w-12 rounded-full"
+                          />
+                        )}
+                        <div className="ml-4">
+                          <h4 className="text-sm font-bold text-gray-900">
+                            {comment.attributes.user.data?.attributes.username}
+                          </h4>
+
+                          <p className="text-xs">
+                            {comment.attributes.createdAt}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        className="mt-4 space-y-6 text-base italic text-gray-600"
+                        dangerouslySetInnerHTML={{
+                          __html: comment.attributes.content,
+                        }}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>

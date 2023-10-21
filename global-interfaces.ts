@@ -28,6 +28,7 @@ export interface FiltersState {
   postTagTerms?: string[];
   currentPage: number;
   postsPerPage: number;
+  switchButtonEnabled: boolean;
 }
 
 export interface PostsState {

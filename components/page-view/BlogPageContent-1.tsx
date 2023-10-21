@@ -6,7 +6,7 @@ import { ChevronDoubleRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Head from "next/head";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import BlogPostList from "../data-view/BlogPostList";
+import BlogPostList from "../list-view/BlogPostList";
 import JobSortForm from "../forms/JobSortForm";
 import SearchForm from "../forms/SearchForm";
 import { Page } from "../globals";

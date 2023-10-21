@@ -22,11 +22,13 @@ const CommentForm = ({ postId }: { postId: number | undefined }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const dispatch = useDispatch();
   const [createComment] = useCreateCommentMutation();
 
   const onSubmit = async (data: any) => {
+    reset();
     try {
       await createComment({
         content: data.comment,

@@ -3,6 +3,7 @@ import { UserCircleIcon } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
 
 const UserProfileHeader = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
   const user = useSelector((state: RootState) => state.auth.user);
 
   return (
@@ -13,7 +14,7 @@ const UserProfileHeader = () => {
             {user?.profileImage?.url ? (
               <img
                 alt="User Profile"
-                src={`http://localhost:1337${user.profileImage.url}`}
+                src={`${baseUrl}${user.profileImage.url}`}
                 className="w-full h-full object-cover shadow-xl"
               />
             ) : (

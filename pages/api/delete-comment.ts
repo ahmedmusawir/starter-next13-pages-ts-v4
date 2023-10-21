@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    await strapiApiClient.delete(`/api/comments/${commentId}`, {
+    await strapiApiClient.delete(`/comments/${commentId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
