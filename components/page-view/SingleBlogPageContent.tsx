@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Page } from "../globals";
 import { PostData } from "@/data-layer/post-entities";
 import Comments from "../ui-ux/Comments";
+import { formatDate } from "@/utils";
 
 interface Props {
   post: PostData;
@@ -14,7 +15,7 @@ const SingleBlogPageContent = ({ post }: Props) => {
   return (
     <>
       <Head>
-        <title>Company Details Page</title>
+        <title>Single Post Page</title>
         <meta name="description" content="This is the demo page" />
       </Head>
       <Page className={""} FULL={false}>
@@ -31,7 +32,7 @@ const SingleBlogPageContent = ({ post }: Props) => {
                 {post.attributes.title}
               </h2>
               <p className="mt-6 text-xl leading-8 text-gray-300">
-                {post.attributes.createdAt}
+                {formatDate(post.attributes.createdAt)}
               </p>
             </div>
           </div>
