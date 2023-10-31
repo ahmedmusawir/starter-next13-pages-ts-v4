@@ -46,7 +46,7 @@ const Comments = ({ comments }: Props) => {
               </button>
             )}
           </div>
-          {isAuthenticated && <CommentForm />}
+          {isAuthenticated && <CommentForm postId={1} />}
         </div>
 
         <div className="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">

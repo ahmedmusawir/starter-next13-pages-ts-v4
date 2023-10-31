@@ -1,4 +1,3 @@
-import { useAuth } from "@/contexts/AuthContext";
 import { setUser } from "@/features/auth/authSlice";
 import { RootState } from "@/global-interfaces";
 import useProfileImageUpload from "@/hooks/useProfileImageUpload";

@@ -1,4 +1,3 @@
-import { useAuth } from "@/contexts/AuthContext";
 import { useSignupMutation } from "@/features/auth/apiAuth";
 import { closeLoginModal, openLoginModal } from "@/features/auth/authSlice";
 import { ApiError, RootState } from "@/global-interfaces";

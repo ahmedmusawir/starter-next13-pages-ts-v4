@@ -1,4 +1,3 @@
-import { useAuth } from "@/contexts/AuthContext";
 import Head from "next/head";
 import { Page } from "../globals";
 import UpdatePassword from "../ui-ux/UpdatePassword";
