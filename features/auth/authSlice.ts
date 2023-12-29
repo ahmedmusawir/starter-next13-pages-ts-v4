@@ -1,14 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const getInitialAuthenticationState = (): boolean => {
-  if (typeof window !== "undefined") {
-    return window.localStorage.getItem("authFlag") === "true";
-  }
-  return false;
-};
-
 const initialState = {
-  isAuthenticated: getInitialAuthenticationState(),
+  isAuthenticated: false,
   user: null,
   isLoading: false,
   error: null,
@@ -27,21 +20,18 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload;
       state.isLoading = false;
-      localStorage.setItem("authFlag", "true"); // Set authFlag on successful login.
     },
     authenticationFailure: (state, action) => {
       state.isAuthenticated = false;
       state.user = null;
       state.error = action.payload;
       state.isLoading = false;
-      localStorage.removeItem("authFlag"); // Remove authFlag on authentication failure.
     },
-    logout: (state) => {
+    logoutSuccess: (state) => {
       state.isAuthenticated = false;
       state.user = null;
       state.error = null;
       state.isLoading = false;
-      localStorage.removeItem("authFlag"); // Remove authFlag on logout.
     },
     setUser: (state, action) => {
       // In case you need to manually set the user.
@@ -64,7 +54,7 @@ export const {
   startLoading,
   authenticationSuccess,
   authenticationFailure,
-  logout,
+  logoutSuccess,
   setUser,
   setError,
   openLoginModal,

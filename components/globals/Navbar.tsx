@@ -13,13 +13,9 @@ import { useRouter } from "next/router";
 import { useCart } from "@/contexts/CartContext";
 import LoginModal from "../ui-ux/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/global-interfaces";
-import {
-  logout,
-  openLoginModal,
-  closeLoginModal,
-} from "@/features/auth/authSlice";
-import { useAuth } from "@/contexts/AuthContext";
+import { ApiError, RootState } from "@/global-interfaces";
+import { logoutSuccess, openLoginModal } from "@/features/auth/authSlice";
+import { useLogoutMutation } from "@/features/auth/apiAuth";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -34,7 +30,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { setIsCartOpen, cartItems } = useCart();
-  // const { open, setOpen } = useAuth();
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
@@ -43,7 +38,19 @@ const Navbar = () => {
     (state: RootState) => state.auth.loginModalOpen
   );
 
-  console.log("Open Modal in Navbar", openModal);
+  const [logout, { isLoading, isError, data, error }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      // Attempt to call the logout mutation
+      await logout({}).unwrap();
+
+      // If successful, dispatch the logoutSuccess action to update the state
+      dispatch(logoutSuccess());
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const NavLink = ({ href, children }: NavLinkProps) => {
     const isActive = router.pathname === href;
@@ -134,7 +141,7 @@ const Navbar = () => {
                         {cartItems.length}
                       </div>
                     </button>
-
+                    {/* LOGIN BUTTON */}
                     {!isAuthenticated && (
                       <button
                         type="button"
@@ -206,7 +213,8 @@ const Navbar = () => {
                               {({ active }) => (
                                 <a
                                   href="#"
-                                  onClick={() => dispatch(logout())}
+                                  onClick={handleLogout}
+                                  // onClick={() => dispatch(logout())}
                                   className={classNames(
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
