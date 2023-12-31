@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import axios from "axios";
 import { AxiosError } from "@/global-interfaces";
 import strapiApiClient from "@/services/strapiApiClient";
 

@@ -51,8 +51,9 @@ const Hero = () => {
             <div className="mx-auto max-w-7xl px-6 pb-36 pt-3 sm:pt-12 lg:px-8 lg:pt-3">
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-                  <h1 className="text-4xl font-bold tracking-tight  text-indigo-600 sm:text-6xl">
-                    Welcome to Next.js Starter v4 (w/ Redux)
+                  <h1 className="text-4xl font-bold tracking-tight  text-indigo-600 sm:text-5xl">
+                    Welcome to Next.js, HTTP-only-cookie & JWT Auth w/ Strapi v4
+                    (w/ Redux)
                   </h1>
                   <p className="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
                     Cupidatat minim id magna ipsum sint dolor qui. Sunt sit

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useAuth } from "@/contexts/AuthContext";
 import { RootState } from "@/global-interfaces";
 import { useSelector } from "react-redux";
 
