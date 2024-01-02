@@ -15,22 +15,18 @@ const SearchForm = () => {
     setInputValue(e.target.value); // Update the local state
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
+  const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      e.preventDefault();
+
       dispatch(setCurrentPage(1));
 
       dispatch(setSearchTerm(inputValue)); // Use the local state value
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent form submission
-  };
-
   return (
-    <form className="relative flex flex-1" onSubmit={handleSubmit}>
+    <form className="relative flex flex-1" onSubmit={(e) => e.preventDefault()}>
       <label htmlFor="search-field" className="sr-only">
         Search
       </label>
@@ -40,13 +36,12 @@ const SearchForm = () => {
       />
       <input
         id="search-field"
-        className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 sm:text-sm focus:outline-none"
+        className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus:outline-none focus:border-none sm:text-sm"
         placeholder="Search..."
         type="search"
         name="search"
-        // value={searchFormState}
         onChange={(e) => handleSearch(e)}
-        onKeyUp={handleKeyPress}
+        onKeyUp={handleSearchSubmit} // onKeyUp for detecting "Enter" key press
       />
     </form>
   );
